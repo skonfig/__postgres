@@ -1,11 +1,8 @@
 cdist-type__postgres_database(7)
 ================================
+Create/drop postgres databases
+
 Steven Armstrong <steven-cdist--@--armstrong.cc>
-
-
-NAME
-----
-cdist-type__postgres_database - create/drop postgres databases
 
 
 DESCRIPTION
@@ -15,25 +12,25 @@ This cdist type allows you to create or drop postgres databases.
 
 OPTIONAL PARAMETERS
 -------------------
-state::
+state
    either 'present' or 'absent', defaults to 'present'.
 
-owner::
+owner
    the role owning this database
 
 
 EXAMPLES
 --------
 
---------------------------------------------------------------------------------
-__postgres_database mydbname --owner mydbusername
---------------------------------------------------------------------------------
+.. code-block:: sh
+
+    __postgres_database mydbname --owner mydbusername
 
 
 SEE ALSO
 --------
-- cdist-type(7)
-- cdist-type__postgres_role(7)
+- `cdist-type(7) <cdist-type.html>`_
+- `cdist-type__postgres_role(7) <cdist-type__postgres_role.html>`_
 
 
 COPYING
