@@ -29,7 +29,7 @@ quote() { printf '%s\n' "$*" | sed "s/'/'\\\\''/g;1s/^/'/;\$s/\$/'/"; }
 psql_cmd() {
 	printf 'su - %s -c %s\n' \
 		"$(quote "${postgres_user}")" \
-		"$(quote psql "$(quote "$1")" -c "$(quote "$2")")"
+		"$(quote psql -c "$(quote "$2")" "$(quote "$1")" postgres)"
 }
 
 
