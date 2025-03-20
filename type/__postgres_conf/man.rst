@@ -35,7 +35,10 @@ EXAMPLES
 .. code-block:: sh
 
    # set timezone
-   __postgres_conf timezone --value Europe/Zurich
+   __postgres_conf timezone --value 'Europe/Zurich'
+
+   # listen on all interfaces
+   __postgres_conf listen_address --state present --value '*'
 
    # reset maximum number of concurrent connections to default (normally 100)
    __postgres_conf max_connections --state absent
