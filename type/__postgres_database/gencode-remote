@@ -31,7 +31,7 @@ quote() {
 			set -- "$@" "${_arg}"
 		fi
 	done
-	unset _arg
+	unset -v _arg
 
 	# NOTE: Use printf because POSIX echo interprets escape sequences
 	printf '%s' "$*"

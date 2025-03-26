@@ -51,7 +51,7 @@ psql_set_password() {
 	if test -s "${__object:?}/parameter/password"
 	then
 		cat <<-EOF
-		exec 3< "\${__object:?}/parameter/password"
+		exec 3<"\${__object:?}/parameter/password"
 		su -l '${postgres_user}' -c 'psql -q -w postgres' <<'SQL'
 		\set HISTFILE /dev/null
 		\set pw \`cat <&3\`
@@ -78,7 +78,7 @@ role_properties_should() {
 			| tr '[:lower:]' '[:upper:]')"
 	done
 	printf '%s\n' "${_props}"
-	unset _prop _props
+	unset -v _prop _props
 }
 
 case ${state_should}
