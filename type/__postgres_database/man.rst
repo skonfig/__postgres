@@ -8,7 +8,7 @@ cdist-type__postgres_database - Create/drop postgres databases
 
 DESCRIPTION
 -----------
-This cdist type allows you to create or drop postgres databases.
+This type allows you to create or drop postgres databases.
 
 
 OPTIONAL PARAMETERS

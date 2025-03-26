@@ -8,7 +8,7 @@ cdist-type__postgres_role - Manage postgres roles
 
 DESCRIPTION
 -----------
-This cdist type allows you to create or drop postgres roles.
+This type allows you to create or drop postgres roles.
 
 
 OPTIONAL PARAMETERS

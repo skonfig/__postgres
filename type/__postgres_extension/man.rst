@@ -8,7 +8,7 @@ cdist-type__postgres_extension - Manage PostgreSQL extensions
 
 DESCRIPTION
 -----------
-This cdist type allows you to manage PostgreSQL extensions.
+This type allows you to manage PostgreSQL extensions.
 
 The ``__object_id`` to pass to ``__postgres_extension`` is of the form
 ``dbname:extension``, e.g.:
