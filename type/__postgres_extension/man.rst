@@ -56,8 +56,8 @@ SEE ALSO
 
 AUTHORS
 -------
-| Tomas Pospisek <tpo_deb--@--sourcepole.ch>
-| Dennis Camera <dennis.camera--@--ssrq-sds-fds.ch>
+* Tomas Pospisek <tpo_deb--@--sourcepole.ch>
+* Dennis Camera <dennis.camera--@--riiengineering.ch>
 
 
 COPYING
