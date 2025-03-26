@@ -1,0 +1,113 @@
+---
+name: shellcheck
+on: [push, pull_request]
+jobs:
+  shellcheck:
+    runs-on: ubuntu-latest
+    env:
+      SHELLCHECKOPTS: -a -x -s sh -P SCRIPTDIR -o require-variable-braces -o deprecate-which -o avoid-nullary-conditions
+      # -o check-set-e-suppressed -o check-extra-masked-returns
+    steps:
+      - name: Install shellcheck
+        shell: sh
+        run: |
+          case ${{ runner.os }}
+          in
+            (macOS) osvariant=darwin ;;
+            (Linux) osvariant=linux ;;
+            (Windows)
+              echo 'Windows runners are not supported.' >&2
+              exit 1
+              ;;
+            (*)
+              printf 'unknown runner.os: %s\n' '${{ runner.os }}' >&2
+              exit 1
+              ;;
+          esac
+          case ${{ runner.arch }}
+          in
+            (X86)
+              echo 'x86 runners not supported.' >&2
+              exit 1
+              ;;
+            (X64) arch=x86_64 ;;
+            (ARM) arch=armv6hf ;;
+            (ARM64) arch=aarch64 ;;
+            (*)
+              printf 'unknown runner.arch: %s\n' '${{ runner.arch }}' >&2
+              exit 1
+              ;;
+          esac
+
+          scversion=stable  # stable, latest (nightly), or tag (v0.8.0)
+
+          baseurl=https://github.com/koalaman/shellcheck/releases/download
+          filename=shellcheck-${scversion}.${osvariant}.${arch}.tar.xz
+
+          mkdir -p /usr/local/bin
+          curl -s -L "${baseurl}/${scversion}/${filename}" \
+          | tar -x -J -O "shellcheck-${scversion}/shellcheck" \
+          >/usr/local/bin/shellcheck
+          chmod +x /usr/local/bin/shellcheck
+      - name: Display shellcheck version
+        shell: sh
+        run: |
+          command -v shellcheck
+          shellcheck --version
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Run shellcheck
+        shell: sh
+        run: |
+          # shellcheck
+
+          if test -d ./explorer
+          then
+            # check explorers
+            find ./explorer -type f \
+              -exec awk 'FNR==1{exit !/^#!\/bin\/sh/}' {} \; \
+              -exec shellcheck ${SHELLCHECKOPTS-} {} + \
+            || steprc=1
+          fi
+
+          # Check types
+          for type in ./type/*/.
+          do
+            rc=0
+            type=${type%/.}
+
+            for c in \
+              "${type}"/manifest \
+              "${type}"/gencode-local \
+              "${type}"/gencode-remote
+            do
+              test -e "${c}" || continue
+
+              shellcheck ${SHELLCHECKOPTS-} "${c}" || rc=1
+            done
+
+            if test -d "${type}/explorer"
+            then
+              find "${type}/explorer" -type f \
+                -exec awk 'FNR==1{exit !/^#!\/bin\/sh/}' {} \; \
+                -exec shellcheck ${SHELLCHECKOPTS-} {} + \
+              || rc=1
+            fi
+
+            if test -d "${type}/files"
+            then
+              find "${type}/files" -type f \
+                \( -name '*.sh' -o -exec awk 'FNR==1{exit !/^#!\/bin\/sh/}' {} \; \) \
+                -exec shellcheck ${SHELLCHECKOPTS-} {} + \
+              || rc=1
+            fi
+
+            if test $((rc)) -ne 0
+            then
+              steprc=1
+            fi
+          done
+
+          exit $((steprc))
